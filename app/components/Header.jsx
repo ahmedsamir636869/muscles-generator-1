@@ -112,7 +112,7 @@ function Header() {
                   onClick={toggleDropdown}
                 >
                   <img
-                    src="peo.svg"
+                    src="pro.svg"
                     alt="Profile"
                     className="w-8 h-8 rounded-full"
                   />

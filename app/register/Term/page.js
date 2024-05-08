@@ -1,13 +1,14 @@
 // pages/terms.js
 
 import React from 'react';
+import './page.css'
 
 const TermsPage = () => {
     return (
-        <div className="bg-primary min-h-screen">
+        <div className="bg-black min-h-screen">
             <div className="max-w-4xl mx-auto px-6 py-12">
-                <h1 className="text-4xl font-bold text-center mb-8">Terms and Conditions</h1>
-                <div className="bg-primary2 shadow-lg rounded-lg px-8 py-6 mb-8">
+                <h1 className="text-4xl font-bold text-center mb-8 bg-gradient-to-r from-red-900 via-red-500 to-orange-700 bg-clip-text text-transparent ">Terms and Conditions</h1>
+                <div className="bg-black shadow-lg rounded-lg px-8 py-6 mb-8 text-white content">
                     <h2 className="text-2xl font-bold mb-4">Welcome to Our Gym Community!</h2>
                     <p className="mb-4">By joining, you agree to abide by the following terms and conditions:</p>
                     <ol className="list-decimal pl-8 mb-4">

@@ -1,10 +1,11 @@
 import React from 'react'
+import Muslces from '../../Muscles/page'
 
 export default function page() {
   return (
-    <div>
-        <h1> Workout</h1>
-      
-    </div>
+   <div>
+<Muslces/>
+    
+   </div>
   )
 }

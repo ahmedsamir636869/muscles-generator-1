@@ -1,10 +1,10 @@
 import React from 'react';
-
+import './page.css'
 export default function Page() {
     return (
         <div className="min-h-screen flex items-center justify-center bg-primary">
-        <div className="bg-primary2 shadow-lg rounded-lg px-8 py-6 max-w-lg">
-            <h2 className="text-2xl font-bold mb-4">Privacy Policy</h2>
+        <div className="bg-black shadow-lg rounded-lg px-8 py-6 max-w-lg text-white content">
+            <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-red-700 via-red-500 to-orange-500 bg-clip-text text-transparent">Privacy Policy</h2>
             <p className="mb-4">Your privacy is important to us. We collect and use your personal information responsibly to provide you with the best gym experience possible. Our privacy policy includes:</p>
             <ul className="list-disc pl-8 mb-4">
                 <li className="mb-2">How we collect and use your personal information.</li>
