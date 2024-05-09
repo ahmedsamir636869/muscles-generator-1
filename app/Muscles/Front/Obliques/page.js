@@ -45,7 +45,7 @@ function chest() {
       <br></br>
       <li>    Pick your hips up off the ground and maintain this position for the allotted amount of time.</li>
       <br></br>
-      <li>Make sure you don't let your chest fall forward or backward.</li>
+      <li>Make sure you don&apos;t let your chest fall forward or backward.</li>
     </ol>
     
     {/* <p className="mt-2 line-clamp-3 text-sm/relaxed text-gray-500">
@@ -97,7 +97,7 @@ function chest() {
     <ol className='mt-2 text-sm text-gray-500 pl-2'>
       <li>Sit on the floor and flex your knees and hips to a 90 degree angle. </li>
       <br></br>
-      <li>    Your feet should be hovering off the ground. (If that's too hard start with heels on the floor)</li>
+      <li>    Your feet should be hovering off the ground. (If that&apos;s too hard start with heels on the floor)</li>
       <br></br>
       <li>    Rotate your upper spine to engage your obliques.</li>
     </ol>
