@@ -1,35 +1,59 @@
+import NextAuth from "next-auth";
+import Providers from "next-auth/providers";
 import { connectMongoDB } from "/lib/mongodb";
 import User from "/models/User";
-import NextAuth from "next-auth/next";
-import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from 'bcryptjs'
+import bcrypt from 'bcryptjs';
 
-export default async (req, res) => {
-    if (req.method === 'POST') {
-        const { email, password } = req.body;
+const options = {
+    providers: [
+        Providers.Credentials({
+            // The name to display on the sign-in form (e.g. 'Sign in with...')
+            name: 'Credentials',
+            credentials: {
+                email: { label: "Email", type: "email" },
+                password: {  label: "Password", type: "password" }
+            },
+            authorize: async (credentials) => {
+                const { email, password } = credentials;
+                try {
+                    await connectMongoDB();
+                    const user = await User.findOne({ email });
 
-        try {
-            await connectMongoDB();
-            const user = await User.findOne({ email });
+                    if (!user) return null;
+                    
+                    const passwordsMatch = await bcrypt.compare(password, user.password);
 
-            if (!user) {
-                return res.status(401).json({ error: 'Invalid email or password' });
+                    if (!passwordsMatch) return null;
+                    
+                    console.log('User with ID: ', user._id, ' and Email of: ', user.email, ' has logged in successfully!')
+
+                    return user;
+                } catch (error) {
+                    console.error('Login Error: ', error);
+                    return null;
+                }
             }
-            
-            const passwordsMatch = await bcrypt.compare(password, user.password);
-
-            if (!passwordsMatch) {
-                return res.status(401).json({ error: 'Invalid email or password' });
-            }
-            
-            console.log('User with ID: ', user._id, ' and Email of: ', user.email, ' has logged in successfully!')
-
-            return res.status(200).json({ user });
-        } catch (error) {
-            console.log('Login Error: ', error)
-            return res.status(500).json({ error: 'Internal server error' });
+        })
+    ],
+    session: {
+        jwt: true,
+    },
+    jwt: {
+        secret: process.env.NEXTAUTH_SECRET,
+    },
+    pages: {
+        signIn: '/login',
+    },
+    callbacks: {
+        async signIn(user, account, profile) {
+            // Return false to deny access or true to allow access
+            return true
+        },
+        async redirect(url, baseUrl) {
+            return url.startsWith(baseUrl) ? url : baseUrl
         }
-    } else {
-        return res.status(405).json({ error: 'Method Not Allowed' });
-    }
-};
+    },
+    debug: process.env.NODE_ENV === "development",
+}
+
+export default (req, res) => NextAuth(req, res, options)
