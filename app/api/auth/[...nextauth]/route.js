@@ -1,12 +1,11 @@
-export const dynamic = 'force-dynamic'
 
-import { connectMongoDB } from "/lib/mongodb";
-import User from "/models/User";
-import NextAuth from "next-auth/next";
+import { connectMongoDB } from "../../../lib/mongodb";
+import User from "../../../models/User";
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt from 'bcryptjs'
+import bcrypt from 'bcryptjs';
 
-export const authOptions = {
+export default NextAuth({
     providers: [
         CredentialsProvider({
             name: "credentials",
@@ -21,7 +20,6 @@ export const authOptions = {
 
                     if (!user) return null;
                     
-                
                     const passwordsMatch = await bcrypt.compare(password, user.password);
 
                     if (!passwordsMatch) return null;
@@ -32,7 +30,6 @@ export const authOptions = {
                 } catch (error) {
                     console.log('Login Error: ', error)
                 }
-
             }
         }),
     ],
@@ -43,8 +40,4 @@ export const authOptions = {
     pages: {
         signIn: '/login',
     }
-};
-
-const handler = NextAuth(authOptions);
-
-export {handler as GET, handler as POST};
+});
