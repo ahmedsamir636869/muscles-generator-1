@@ -1,26 +1,27 @@
-import NextAuth from "next-auth";
-import Providers from "next-auth/providers";
+export const dynamic = 'force-dynamic'
+
 import { connectMongoDB } from "/lib/mongodb";
 import User from "/models/User";
-import bcrypt from 'bcryptjs';
+import NextAuth from "next-auth/next";
+import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from 'bcryptjs'
 
-const options = {
+export const authOptions = {
     providers: [
-        Providers.Credentials({
-            // The name to display on the sign-in form (e.g. 'Sign in with...')
-            name: 'Credentials',
-            credentials: {
-                email: { label: "Email", type: "email" },
-                password: {  label: "Password", type: "password" }
-            },
-            authorize: async (credentials) => {
-                const { email, password } = credentials;
+        CredentialsProvider({
+            name: "credentials",
+            credentials: {},
+            
+            async authorize(credentials) {
+                const {email, password} = credentials;
+                
                 try {
                     await connectMongoDB();
                     const user = await User.findOne({ email });
 
                     if (!user) return null;
                     
+                
                     const passwordsMatch = await bcrypt.compare(password, user.password);
 
                     if (!passwordsMatch) return null;
@@ -29,31 +30,21 @@ const options = {
 
                     return user;
                 } catch (error) {
-                    console.error('Login Error: ', error);
-                    return null;
+                    console.log('Login Error: ', error)
                 }
+
             }
-        })
+        }),
     ],
     session: {
-        jwt: true,
+        strategy: 'jwt',
     },
-    jwt: {
-        secret: process.env.NEXTAUTH_SECRET,
-    },
+    secret: process.env.NEXTAUTH_SECRET, 
     pages: {
         signIn: '/login',
-    },
-    callbacks: {
-        async signIn(user, account, profile) {
-            // Return false to deny access or true to allow access
-            return true
-        },
-        async redirect(url, baseUrl) {
-            return url.startsWith(baseUrl) ? url : baseUrl
-        }
-    },
-    debug: process.env.NODE_ENV === "development",
-}
+    }
+};
 
-export default (req, res) => NextAuth(req, res, options)
+const handler = NextAuth(authOptions);
+
+export {handler as GET, handler as POST};
